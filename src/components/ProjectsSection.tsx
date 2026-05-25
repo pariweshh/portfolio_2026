@@ -4,7 +4,6 @@ import {
   motion,
   useScroll,
   useTransform,
-  useSpring,
   useMotionValueEvent,
   type MotionValue,
 } from "motion/react";
@@ -23,63 +22,6 @@ const TRANSITION_MS = (STRIP_STAGGER * (STRIP_COUNT - 1) + STRIP_DURATION) * 100
 const EASE = [0.16, 1, 0.3, 1] as const;
 const STRIP_H = 100 / STRIP_COUNT; // height of one strip in %
 
-// ── SVG distortion filter ─────────────────────────────────────────────────────
-// Spring-driven so the scanline glitch fires only at slide boundaries.
-
-function DistortionFilter({ progress }: { progress: MotionValue<number> }) {
-  const dispRef = useRef<SVGFEDisplacementMapElement>(null);
-  const TW = 0.05;
-
-  useMotionValueEvent(progress, "change", (v) => {
-    if (!dispRef.current) return;
-    // useScroll ["start start","end end"] maps 0→1 over (TOTAL_SLIDES-1) slide
-    // heights, so snap point n sits at v = n/(TOTAL_SLIDES-1).
-    // distance from nearest rest = 0 when settled → scale = 0.
-    // peaks at 0.5/(TOTAL_SLIDES-1) mid-transition → scale = 90.
-    const N = TOTAL_SLIDES - 1;
-    const nearest = Math.round(v * N) / N;
-    const distFromRest = Math.abs(v - nearest);
-    const halfSlide = 0.5 / N;
-    const scale =
-      distFromRest < halfSlide ? 90 * (distFromRest / halfSlide) : 0;
-    dispRef.current.setAttribute("scale", String(scale));
-  });
-
-  return (
-    <svg
-      className="absolute w-0 h-0 overflow-hidden pointer-events-none"
-      aria-hidden="true"
-    >
-      <defs>
-        <filter
-          id="proj-distort"
-          x="-15%"
-          y="0%"
-          width="130%"
-          height="100%"
-          colorInterpolationFilters="sRGB"
-        >
-          <feTurbulence
-            type="turbulence"
-            baseFrequency="0 0.04"
-            numOctaves="1"
-            seed="7"
-            result="noise"
-          />
-          <feDisplacementMap
-            ref={dispRef}
-            in="SourceGraphic"
-            in2="noise"
-            scale="0"
-            xChannelSelector="R"
-            yChannelSelector="R"
-          />
-        </filter>
-      </defs>
-    </svg>
-  );
-}
-
 // ── Slide background ───────────────────────────────────────────────────────────
 // The settled, fully-visible state of a slide — image + bottom vignette.
 
@@ -89,7 +31,7 @@ function SlideBackground({ project }: { project: ProjectData | null }) {
     return <div className="absolute inset-0 bg-(--bg)" />;
   }
   return (
-    <div className="absolute inset-0" style={{ filter: "url(#proj-distort)" }}>
+    <div className="absolute inset-0">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -337,13 +279,6 @@ export default function ProjectsSection({
     offset: ["start start", "end end"],
   });
 
-  // Spring for the distortion filter only — not for slide selection
-  const springProgress = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 25,
-    mass: 0.5,
-  });
-
   // Derive active slide index from raw scroll (zero lag).
   // useScroll ["start start","end end"] maps 0→1 over (TOTAL_SLIDES-1)×100vh,
   // so snap point n sits at v = n/(TOTAL_SLIDES-1). Math.round is correct here.
@@ -413,7 +348,6 @@ export default function ProjectsSection({
       className="relative"
     >
       <div className="sticky top-0 h-screen overflow-hidden bg-black">
-        <DistortionFilter progress={springProgress} />
         <ProjectCounter index={displayedIndex} />
 
         {/* ── Settled background (the slide currently in stable view) ── */}

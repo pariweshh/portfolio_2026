@@ -35,7 +35,7 @@ export default function AboutSection() {
           className="md:w-[45%] relative min-h-110 md:min-h-160 bg-[#1a1a1a] overflow-hidden shrink-0 mx-6 md:mx-0 md:ml-16"
         >
           <Image
-            src={"/about.png"}
+            src={"/about.webp"}
             alt="portrait"
             fill
             sizes="(max-width: 768px) 100vw, 45vw"
