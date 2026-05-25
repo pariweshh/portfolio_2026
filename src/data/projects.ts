@@ -263,6 +263,7 @@ export const PROJECTS: ProjectData[] = [
       "App Store Deployment",
     ],
     images: [
+      "/images/projects/darshan-app/0.webp",
       "/images/projects/darshan-app/1.webp",
       "/images/projects/darshan-app/2.webp",
       "/images/projects/darshan-app/3.webp",

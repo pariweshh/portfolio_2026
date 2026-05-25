@@ -10,7 +10,14 @@ const HIGHLIGHT = {
 
 export default function AboutSection() {
   return (
-    <section id="about" className="bg-[#f0ede6]">
+    <section
+      id="about"
+      className="bg-[#0a0a0a]"
+      style={{
+        background:
+          "radial-gradient(ellipse 90% 50% at 50% 0%, rgba(231,142,41,0.06) 0%, transparent 65%), #0a0a0a",
+      }}
+    >
       {/* ── Label ──────────────────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-6 md:px-16 pt-25 pb-16 md:pb-20">
         <motion.p
@@ -18,7 +25,7 @@ export default function AboutSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="border-t border-black/10 pt-6 text-[#888] font-mono text-[11px] tracking-[0.2em] uppercase"
+          className="border-t border-white/[0.08] pt-6 text-(--muted) font-mono text-[11px] tracking-[0.2em] uppercase"
         >
           // ABOUT
         </motion.p>
@@ -66,7 +73,7 @@ export default function AboutSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="font-heading font-bold leading-[1.08] tracking-[-0.02em] text-[#0a0a0a] text-4xl md:text-5xl lg:text-6xl mb-8"
+            className="font-heading font-bold leading-[1.08] tracking-[-0.02em] text-white text-4xl md:text-5xl lg:text-6xl mb-8"
           >
             Building AI products
             <br />
@@ -79,7 +86,7 @@ export default function AboutSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="space-y-5 text-[#555] text-sm md:text-base leading-relaxed max-w-xl mb-10"
+            className="space-y-5 text-(--muted) text-sm md:text-base leading-relaxed max-w-xl mb-10"
           >
             <p>
               I&apos;m a full-stack AI engineer who turns ambitious ideas into
@@ -104,16 +111,16 @@ export default function AboutSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="border border-[#d0ccc6] border-l-2 bg-black/3 px-6 py-5 mb-8 max-w-xl"
+            className="border border-white/[0.08] border-l-2 bg-white/[0.02] px-6 py-5 mb-8 max-w-xl"
             style={{ borderLeftColor: "var(--accent)" }}
           >
-            <p className="text-[#0a0a0a] font-heading font-semibold text-sm md:text-base mb-1">
+            <p className="text-white font-heading font-semibold text-sm md:text-base mb-1">
               {HIGHLIGHT.title}
             </p>
-            <p className="text-[#888] font-mono text-xs mb-3">
+            <p className="text-(--muted) font-mono text-xs mb-3">
               {HIGHLIGHT.subtitle}
             </p>
-            <p className="text-[#777] text-xs">{HIGHLIGHT.tags}</p>
+            <p className="text-white/50 text-xs">{HIGHLIGHT.tags}</p>
           </motion.div>
 
           {/* Status indicator */}
@@ -128,7 +135,7 @@ export default function AboutSection() {
               className="w-2 h-2 rounded-full shrink-0"
               style={{ backgroundColor: "var(--accent)" }}
             />
-            <span className="text-[#888] font-mono text-xs tracking-widest">
+            <span className="text-(--muted) font-mono text-xs tracking-widest">
               Available for new projects · Remote / Worldwide
             </span>
           </motion.div>

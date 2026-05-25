@@ -31,7 +31,14 @@ const CHANNELS = [
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="bg-[var(--bg)]">
+    <section
+      id="contact"
+      className="bg-[#0a0a0a]"
+      style={{
+        background:
+          "radial-gradient(ellipse 70% 60% at 30% 100%, rgba(231,142,41,0.08) 0%, transparent 60%), #0a0a0a",
+      }}
+    >
       {/* Heading block */}
       <div className="max-w-screen-xl mx-auto px-6 md:px-16 pt-[100px] pb-20 md:pb-28">
         <motion.p

@@ -22,6 +22,12 @@ interface HomePageProps {
   onNextPage: () => void;
 }
 
+function Separator() {
+  return (
+    <div className="w-full h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+  );
+}
+
 const FRAME_COUNT = 48;
 
 export default function HomePage({ onNextPage }: HomePageProps) {
@@ -493,12 +499,18 @@ export default function HomePage({ onNextPage }: HomePageProps) {
       </div>
 
       <IntroSection />
+      <Separator />
       <ExpertiseSection />
+      <Separator />
       <AboutSection />
+      <Separator />
       <CareerSection />
       <ProjectsSection onViewProject={onNextPage} />
+      <Separator />
       <ToolsSection />
+      <Separator />
       <TestimonialsSection />
+      <Separator />
       <ContactSection />
     </motion.main>
   );

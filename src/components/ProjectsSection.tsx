@@ -8,7 +8,12 @@ import {
   type MotionValue,
 } from "motion/react";
 import { ExternalLink } from "lucide-react";
-import { PROJECTS, type ProjectData, flatTitle, slideTags } from "@/data/projects";
+import {
+  PROJECTS,
+  type ProjectData,
+  flatTitle,
+  slideTags,
+} from "@/data/projects";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -17,7 +22,8 @@ const STRIP_COUNT = 12;
 const STRIP_STAGGER = 0.025; // seconds between each strip
 const STRIP_DURATION = 0.45; // seconds per strip animation
 // Total time for all strips to finish:
-const TRANSITION_MS = (STRIP_STAGGER * (STRIP_COUNT - 1) + STRIP_DURATION) * 1000; // ~725 ms
+const TRANSITION_MS =
+  (STRIP_STAGGER * (STRIP_COUNT - 1) + STRIP_DURATION) * 1000; // ~725 ms
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const STRIP_H = 100 / STRIP_COUNT; // height of one strip in %
@@ -41,7 +47,7 @@ function SlideBackground({ project }: { project: ProjectData | null }) {
           backgroundColor: project.bgColor,
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/20 to-transparent" />
     </div>
   );
 }
@@ -62,9 +68,7 @@ function VenetianReveal({ project }: { project: ProjectData | null }) {
         // clipPath inset values:
         //   fromTop  → start fully clipped from bottom, reveal downward
         //   fromBottom → start fully clipped from top, reveal upward
-        const initialClip = fromTop
-          ? "inset(0 0 100% 0)"
-          : "inset(100% 0 0 0)";
+        const initialClip = fromTop ? "inset(0 0 100% 0)" : "inset(100% 0 0 0)";
 
         return (
           <motion.div
@@ -245,7 +249,11 @@ function SegmentBar({
   segStart: number;
   segEnd: number;
 }) {
-  const fill = useTransform(scrollYProgress, [segStart, segEnd], ["0%", "100%"]);
+  const fill = useTransform(
+    scrollYProgress,
+    [segStart, segEnd],
+    ["0%", "100%"],
+  );
   return (
     <div className="flex-1 h-full bg-white/20 relative overflow-hidden">
       <motion.div
@@ -283,7 +291,10 @@ export default function ProjectsSection({
   // useScroll ["start start","end end"] maps 0→1 over (TOTAL_SLIDES-1)×100vh,
   // so snap point n sits at v = n/(TOTAL_SLIDES-1). Math.round is correct here.
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const idx = Math.min(Math.max(Math.round(v * (TOTAL_SLIDES - 1)), 0), TOTAL_SLIDES - 1);
+    const idx = Math.min(
+      Math.max(Math.round(v * (TOTAL_SLIDES - 1)), 0),
+      TOTAL_SLIDES - 1,
+    );
     if (idx === targetRef.current) return;
     targetRef.current = idx;
 
@@ -355,10 +366,7 @@ export default function ProjectsSection({
 
         {/* ── Venetian strips for the incoming slide ── */}
         {incomingIndex !== null && (
-          <VenetianReveal
-            key={incomingIndex}
-            project={incomingProject}
-          />
+          <VenetianReveal key={incomingIndex} project={incomingProject} />
         )}
 
         {/* ── Text overlay (separate from strips so it enters cleanly) ── */}
