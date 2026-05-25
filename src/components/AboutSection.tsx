@@ -1,5 +1,6 @@
 "use client";
-import { motion } from "motion/react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
 import Image from "next/image";
 
 const HIGHLIGHT = {
@@ -9,8 +10,17 @@ const HIGHLIGHT = {
 };
 
 export default function AboutSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const portraitY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["4%", "-4%"]);
+
   return (
     <section
+      ref={sectionRef}
       id="about"
       className="bg-[#0a0a0a]"
       style={{
@@ -25,7 +35,7 @@ export default function AboutSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="border-t border-white/[0.08] pt-6 text-(--muted) font-mono text-[11px] tracking-[0.2em] uppercase"
+          className="border-t border-white/8 pt-6 text-(--muted) font-mono text-[11px] tracking-[0.2em] uppercase"
         >
           // ABOUT
         </motion.p>
@@ -39,6 +49,7 @@ export default function AboutSection() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          style={{ y: portraitY }}
           className="md:w-[45%] relative min-h-110 md:min-h-160 bg-[#1a1a1a] overflow-hidden shrink-0 mx-6 md:mx-0 md:ml-16"
         >
           <Image
@@ -66,7 +77,10 @@ export default function AboutSection() {
         </motion.div>
 
         {/* Right — content */}
-        <div className="flex-1 px-6 md:px-12 lg:px-16 py-12 md:py-0 md:pb-16 flex flex-col justify-center">
+        <motion.div
+          style={{ y: textY }}
+          className="flex-1 px-6 md:px-12 lg:px-16 py-12 md:py-0 md:pb-16 flex flex-col justify-center"
+        >
           {/* Heading */}
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
@@ -111,7 +125,7 @@ export default function AboutSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="border border-white/[0.08] border-l-2 bg-white/[0.02] px-6 py-5 mb-8 max-w-xl"
+            className="border border-white/8 border-l-2 bg-white/2 px-6 py-5 mb-8 max-w-xl"
             style={{ borderLeftColor: "var(--accent)" }}
           >
             <p className="text-white font-heading font-semibold text-sm md:text-base mb-1">
@@ -139,7 +153,7 @@ export default function AboutSection() {
               Available for new projects · Remote / Worldwide
             </span>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Bottom spacer */}

@@ -17,6 +17,7 @@ import CareerSection from "./CareerSection";
 import ProjectsSection from "./ProjectsSection";
 import TestimonialsSection from "./TestimonialsSection";
 import ContactSection from "./ContactSection";
+import NavBar from "./NavBar";
 
 interface HomePageProps {
   onNextPage: () => void;
@@ -24,7 +25,22 @@ interface HomePageProps {
 
 function Separator() {
   return (
-    <div className="w-full h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+    <div className="w-full overflow-hidden">
+      <svg width="100%" height="1" className="overflow-visible block">
+        <motion.line
+          x1="10%"
+          y1="0"
+          x2="90%"
+          y2="0"
+          stroke="rgba(255,255,255,0.06)"
+          strokeWidth="1"
+          initial={{ pathLength: 0, opacity: 0 }}
+          whileInView={{ pathLength: 1, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+        />
+      </svg>
+    </div>
   );
 }
 
@@ -173,6 +189,7 @@ export default function HomePage({ onNextPage }: HomePageProps) {
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className="relative w-full bg-black text-white font-sans"
     >
+      <NavBar onNavigateToProjects={onNextPage} />
       {/* Scroll container — 500vh provides scroll distance for frame playback */}
       <div ref={containerRef} className="relative h-[500vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
@@ -267,25 +284,7 @@ export default function HomePage({ onNextPage }: HomePageProps) {
                 </motion.div>
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="flex items-center gap-4 text-[10px] font-mono tracking-widest text-zinc-200 md:text-zinc-400 uppercase mt-4 md:mt-0"
-              >
-                <span>01 / 05</span>
-                <div className="w-16 h-px bg-zinc-400 md:bg-zinc-600" />
-                <button
-                  onClick={() =>
-                    document
-                      .getElementById("projects")
-                      ?.scrollIntoView({ behavior: "smooth" })
-                  }
-                  className="hover:text-white transition-colors tracking-widest cursor-pointer"
-                >
-                  VIEW PROJECTS
-                </button>
-              </motion.div>
+              {/* Top-right slot intentionally empty — NavBar hamburger lives here */}
             </div>
 
             {/* Spacer */}

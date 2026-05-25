@@ -19,7 +19,7 @@
 }
 
 body {
-  position: relative;
+  position: relative !important;
   background-color: #000;
   color: #fff;
   font-family: var(--font-sans);
@@ -29,13 +29,21 @@ body {
 }
 
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes marquee-reverse {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes scanline {

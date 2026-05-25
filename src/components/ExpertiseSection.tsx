@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "motion/react";
 import ParticleField from "./ParticleField";
+import TiltCard from "./TiltCard";
 
 const SKILLS = [
   "AI Agent Engineering",
@@ -52,27 +53,30 @@ export default function ExpertiseSection() {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2">
             {SKILLS.map((skill, i) => (
-              <motion.div
+              <TiltCard
                 key={skill}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{
-                  duration: 0.5,
-                  ease: [0.16, 1, 0.3, 1],
-                  delay: (i % 4) * 0.06,
-                }}
-                className={`grid grid-cols-[1fr_auto] items-center gap-8 border-b border-white/8 py-5 group cursor-default ${
-                  i % 2 === 0 ? "md:pr-16" : "md:pl-16"
-                }`}
+                className={i % 2 === 0 ? "md:pr-16" : "md:pl-16"}
+                maxTilt={4}
               >
-                <span className="font-heading font-semibold text-white text-lg md:text-xl group-hover:text-(--accent) transition-colors duration-300">
-                  {skill}
-                </span>
-                <span className="text-(--muted) font-mono text-sm tabular-nums">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-              </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{
+                    duration: 0.5,
+                    ease: [0.16, 1, 0.3, 1],
+                    delay: (i % 4) * 0.06,
+                  }}
+                  className="grid grid-cols-[1fr_auto] items-center gap-8 border-b border-white/8 py-5 group cursor-default"
+                >
+                  <span className="font-heading font-semibold text-white text-lg md:text-xl group-hover:text-(--accent) transition-colors duration-300">
+                    {skill}
+                  </span>
+                  <span className="text-(--muted) font-mono text-sm tabular-nums">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </motion.div>
+              </TiltCard>
             ))}
           </div>
         </div>

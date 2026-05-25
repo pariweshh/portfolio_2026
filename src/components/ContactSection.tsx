@@ -1,6 +1,8 @@
 "use client";
-import { motion } from "motion/react";
+import { useRef, type ReactNode, type MouseEvent } from "react";
+import { motion, useMotionValue, useSpring } from "motion/react";
 import { Mail, Code2, Link2, MapPin } from "lucide-react";
+import AnimatedHeading from "./AnimatedHeading";
 
 const CHANNELS = [
   {
@@ -29,6 +31,72 @@ const CHANNELS = [
   },
 ];
 
+const MAGNET_SPRING = { stiffness: 220, damping: 20, mass: 0.4 };
+const MAGNET_MAX = 8;
+
+interface MagneticElementProps {
+  children: ReactNode;
+  className?: string;
+  as?: "div" | "a" | "button";
+  href?: string;
+  onClick?: () => void;
+}
+
+function MagneticElement({
+  children,
+  className = "",
+  as = "div",
+  href,
+  onClick,
+}: MagneticElementProps) {
+  const ref = useRef<HTMLElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, MAGNET_SPRING);
+  const sy = useSpring(y, MAGNET_SPRING);
+
+  const handleMove = (e: MouseEvent<HTMLElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const offsetX = e.clientX - (rect.left + rect.width / 2);
+    const offsetY = e.clientY - (rect.top + rect.height / 2);
+    const clampedX = Math.max(-MAGNET_MAX, Math.min(MAGNET_MAX, offsetX * 0.35));
+    const clampedY = Math.max(-MAGNET_MAX, Math.min(MAGNET_MAX, offsetY * 0.35));
+    x.set(clampedX);
+    y.set(clampedY);
+  };
+
+  const handleLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  const commonProps = {
+    ref: ref as React.Ref<never>,
+    onMouseMove: handleMove,
+    onMouseLeave: handleLeave,
+    style: { x: sx, y: sy },
+    className,
+  };
+
+  if (as === "a") {
+    return (
+      <motion.a {...commonProps} href={href}>
+        {children}
+      </motion.a>
+    );
+  }
+  if (as === "button") {
+    return (
+      <motion.button {...commonProps} onClick={onClick}>
+        {children}
+      </motion.button>
+    );
+  }
+  return <motion.div {...commonProps}>{children}</motion.div>;
+}
+
 export default function ContactSection() {
   return (
     <section
@@ -51,17 +119,19 @@ export default function ContactSection() {
           // CONTACT
         </motion.p>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="font-heading font-bold text-white leading-[1.08] tracking-[-0.02em] text-4xl sm:text-5xl md:text-[72px] lg:text-[84px] max-w-4xl mb-8"
-        >
-          Let&apos;s build something
-          <br />
-          <span style={{ color: "var(--accent)" }}>worth shipping.</span>
-        </motion.h2>
+        <div className="mb-8 max-w-4xl">
+          <AnimatedHeading
+            as="h2"
+            text="Let's build something"
+            className="font-heading font-bold text-white leading-[1.08] tracking-[-0.02em] text-4xl sm:text-5xl md:text-[72px] lg:text-[84px]"
+          />
+          <AnimatedHeading
+            as="h2"
+            delay={0.15}
+            text="worth shipping."
+            className="font-heading font-bold leading-[1.08] tracking-[-0.02em] text-4xl sm:text-5xl md:text-[72px] lg:text-[84px] text-[var(--accent)]"
+          />
+        </div>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -94,12 +164,13 @@ export default function ContactSection() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           <div className="absolute bottom-8 left-8 md:bottom-10 md:left-10">
-            <button
+            <MagneticElement
+              as="button"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               className="inline-flex items-center gap-2 border border-white/20 text-white text-xs font-mono tracking-[0.15em] uppercase px-6 py-3 hover:border-white/40 hover:bg-white/5 transition-colors cursor-pointer"
             >
               ↑ BACK TO TOP
-            </button>
+            </MagneticElement>
           </div>
         </motion.div>
 
@@ -113,33 +184,37 @@ export default function ContactSection() {
             {CHANNELS.map((ch, i) => {
               const Icon = ch.icon;
               return (
-                <motion.a
+                <motion.div
                   key={ch.label}
-                  href={ch.href}
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.08 }}
-                  className="flex items-center gap-5 border-b border-white/[0.08] py-6 group hover:bg-white/[0.02] transition-colors -mx-2 px-2"
                 >
-                  <div className="w-10 h-10 border border-white/[0.08] flex items-center justify-center shrink-0 transition-colors group-hover:border-[var(--accent)]">
-                    <Icon
-                      size={16}
-                      className="text-[var(--muted)] transition-colors group-hover:text-[var(--accent)]"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-[var(--muted)] font-mono text-[10px] tracking-[0.15em] uppercase mb-1">
-                      {ch.label}
-                    </p>
-                    <p className="text-white font-heading text-sm md:text-base transition-colors group-hover:text-[var(--accent)]">
-                      {ch.value}
-                    </p>
-                  </div>
-                  <span className="ml-auto text-[var(--muted)] text-lg transition-colors group-hover:text-[var(--accent)]">
-                    →
-                  </span>
-                </motion.a>
+                  <MagneticElement
+                    as="a"
+                    href={ch.href}
+                    className="flex items-center gap-5 border-b border-white/[0.08] py-6 group hover:bg-white/[0.02] transition-colors -mx-2 px-2"
+                  >
+                    <div className="w-10 h-10 border border-white/[0.08] flex items-center justify-center shrink-0 transition-colors group-hover:border-[var(--accent)]">
+                      <Icon
+                        size={16}
+                        className="text-[var(--muted)] transition-colors group-hover:text-[var(--accent)]"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-[var(--muted)] font-mono text-[10px] tracking-[0.15em] uppercase mb-1">
+                        {ch.label}
+                      </p>
+                      <p className="text-white font-heading text-sm md:text-base transition-colors group-hover:text-[var(--accent)]">
+                        {ch.value}
+                      </p>
+                    </div>
+                    <span className="ml-auto text-[var(--muted)] text-lg transition-colors group-hover:text-[var(--accent)]">
+                      →
+                    </span>
+                  </MagneticElement>
+                </motion.div>
               );
             })}
           </div>

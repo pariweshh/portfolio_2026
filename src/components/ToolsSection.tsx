@@ -62,14 +62,14 @@ export default function ToolsSection() {
         </div>
 
         {/* Tool tags */}
-        <div className="flex flex-wrap gap-2 mb-16">
+        <div className="flex flex-wrap gap-2 mb-16" style={{ perspective: 400 }}>
           {TOOLS.map((tool, i) => (
             <motion.span
               key={tool.name}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, rotateY: 90 }}
+              whileInView={{ opacity: 1, rotateY: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: i * 0.04 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: i * 0.04 }}
               className={`text-sm px-4 py-2.5 border transition-colors duration-200 cursor-default ${
                 tool.featured
                   ? "border-[var(--accent)] text-[var(--accent)]"

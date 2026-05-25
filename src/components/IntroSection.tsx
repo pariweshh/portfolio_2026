@@ -1,11 +1,51 @@
 "use client";
-import { motion } from "motion/react";
+import { useEffect, useRef } from "react";
+import { motion, useInView, animate } from "motion/react";
+import AnimatedHeading from "./AnimatedHeading";
 
 const STATS = [
   { value: "3+", label: "Years of production full-stack engineering" },
   { value: "10+", label: "Projects shipped end-to-end" },
   { value: "3", label: "LLM providers integrated in production" },
 ];
+
+interface StatCounterProps {
+  value: string;
+}
+
+function StatCounter({ value }: StatCounterProps) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inViewRef = useRef<HTMLSpanElement>(null);
+  const inView = useInView(inViewRef, { once: true, margin: "-60px" });
+  const hasRunRef = useRef(false);
+
+  const match = value.match(/^(\d+)(.*)$/);
+  const numericValue = match ? parseInt(match[1], 10) : 0;
+  const suffix = match ? match[2] : "";
+
+  useEffect(() => {
+    if (!inView || hasRunRef.current) return;
+    hasRunRef.current = true;
+
+    const controls = animate(0, numericValue, {
+      duration: 1.8,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => {
+        if (ref.current) {
+          ref.current.textContent = Math.round(v) + suffix;
+        }
+      },
+    });
+
+    return () => controls.stop();
+  }, [inView, numericValue, suffix]);
+
+  return (
+    <span ref={inViewRef}>
+      <span ref={ref}>0{suffix}</span>
+    </span>
+  );
+}
 
 export default function IntroSection() {
   return (
@@ -25,28 +65,17 @@ export default function IntroSection() {
         </motion.p>
 
         <div className="mb-24">
-          <motion.h2
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          <AnimatedHeading
+            as="h2"
+            text="I'm a full-stack engineer who turns ideas into intelligent systems."
             className="font-heading font-bold leading-[1.08] tracking-[-0.02em] text-white text-4xl sm:text-5xl md:text-[72px] lg:text-[84px]"
-          >
-            I&apos;m a full-stack engineer who turns{" "}
-            <span style={{ color: "var(--accent)" }}>ideas</span> into{" "}
-            <span style={{ color: "var(--accent)" }}>intelligent systems.</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
-            className="font-heading font-bold leading-[1.08] tracking-[-0.02em] text-white text-4xl sm:text-5xl md:text-[72px] lg:text-[84px] mt-2"
-          >
-            <span style={{ color: "var(--accent)" }}>AI-first</span>{" "}
-            architecture, built to{" "}
-            <span style={{ color: "var(--accent)" }}>scale.</span>
-          </motion.p>
+          />
+          <AnimatedHeading
+            as="p"
+            delay={0.18}
+            text="AI-first architecture, built to scale."
+            className="font-heading text-(--accent) font-bold leading-[1.08] tracking-[-0.02em] text-4xl sm:text-5xl md:text-[72px] lg:text-[84px] mt-2"
+          />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 border-t border-white/8">
@@ -67,7 +96,7 @@ export default function IntroSection() {
                 className="font-heading font-bold leading-none text-5xl md:text-6xl"
                 style={{ color: "var(--accent)" }}
               >
-                {stat.value}
+                <StatCounter value={stat.value} />
               </div>
               <p className="text-(--muted) text-sm mt-3 leading-relaxed max-w-50">
                 {stat.label}

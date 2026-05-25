@@ -81,19 +81,48 @@ export default function ProjectPage({ onBack, projectIndex }: ProjectPageProps) 
           </motion.span>
         </div>
 
-        {/* Title — overflow hidden clip reveal */}
+        {/* Title — word-by-word mask reveal */}
         <div className="relative z-10 px-6 md:px-16 pb-16 space-y-6">
-          <div className="overflow-hidden">
-            <motion.h1
-              initial={{ y: "102%" }}
-              animate={{ y: "0%" }}
-              transition={{ duration: 1, ease: EASE, delay: 0.25 }}
-              className="font-heading font-bold text-white leading-[0.9] tracking-[-0.02em] whitespace-pre-line"
-              style={{ fontSize: "clamp(56px, 11vw, 148px)" }}
-            >
-              {project.title}
-            </motion.h1>
-          </div>
+          <h1
+            className="font-heading font-bold text-white leading-[0.9] tracking-[-0.02em]"
+            style={{ fontSize: "clamp(56px, 11vw, 148px)" }}
+          >
+            {(() => {
+              const tokens: string[] = [];
+              project.title.split("\n").forEach((line, lineIdx, lines) => {
+                line.split(" ").forEach((w) => {
+                  if (w.length > 0) tokens.push(w);
+                });
+                if (lineIdx < lines.length - 1) tokens.push("\n");
+              });
+              let wordCounter = 0;
+              return tokens.map((tok, i) => {
+                if (tok === "\n") {
+                  return <br key={`br-${i}`} />;
+                }
+                const wordIdx = wordCounter++;
+                return (
+                  <span
+                    key={`w-${i}`}
+                    className="overflow-hidden inline-block align-bottom mr-[0.25em]"
+                  >
+                    <motion.span
+                      initial={{ y: "105%" }}
+                      animate={{ y: "0%" }}
+                      transition={{
+                        duration: 1,
+                        ease: EASE,
+                        delay: 0.3 + wordIdx * 0.06,
+                      }}
+                      className="inline-block"
+                    >
+                      {tok}
+                    </motion.span>
+                  </span>
+                );
+              });
+            })()}
+          </h1>
           <div className="overflow-hidden">
             <motion.p
               initial={{ y: "100%" }}
