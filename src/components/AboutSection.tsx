@@ -50,7 +50,7 @@ export default function AboutSection() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           style={{ y: portraitY }}
-          className="md:w-[45%] relative min-h-110 md:min-h-160 bg-[#1a1a1a] overflow-hidden shrink-0 mx-6 md:mx-0 md:ml-16"
+          className="md:w-[45%] relative min-h-96 md:min-h-160 bg-[#1a1a1a] overflow-hidden shrink-0 md:ml-16"
         >
           <Image
             src={"/about.webp"}

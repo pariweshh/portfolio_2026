@@ -90,7 +90,7 @@ export default function IntroSection() {
                 ease: [0.16, 1, 0.3, 1],
                 delay: i * 0.1,
               }}
-              className="border-b sm:border-b-0 sm:border-r last:border-r-0 border-white/8 py-10 px-8 md:px-10"
+              className="border-b sm:border-b-0 sm:border-r last:border-r-0 border-white/8 py-8 sm:py-10 px-5 sm:px-8 md:px-10"
             >
               <div
                 className="font-heading font-bold leading-none text-5xl md:text-6xl"

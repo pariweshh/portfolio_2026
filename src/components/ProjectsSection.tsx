@@ -8,12 +8,15 @@ import {
   type MotionValue,
 } from "motion/react";
 import { ExternalLink } from "lucide-react";
+import Link from "next/link";
 import {
   PROJECTS,
   type ProjectData,
   flatTitle,
   slideTags,
 } from "@/data/projects";
+
+const MOBILE_LIMIT = 4;
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -131,25 +134,33 @@ function IntroText({ visible }: { visible: boolean }) {
       initial={false}
       animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.6, ease: EASE }}
-      className="absolute inset-0 flex flex-col justify-end px-8 md:px-16 lg:px-24 pb-20 md:pb-28 z-10 pointer-events-none"
+      className="absolute inset-0 flex flex-col justify-end px-6 sm:px-8 md:px-16 lg:px-24 pb-16 sm:pb-20 md:pb-28 z-10 pointer-events-none"
     >
       <div className="max-w-3xl">
-        <p className="text-(--muted) font-mono text-[11px] tracking-[0.2em] uppercase mb-8">
+        <p className="text-(--muted) font-mono text-[11px] tracking-[0.2em] uppercase mb-6 md:mb-8">
           // PROJECTS
         </p>
-        <h2 className="font-heading font-bold text-white leading-[1.08] tracking-[-0.02em] text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-8">
+        <h2 className="font-heading font-bold text-white leading-[1.08] tracking-[-0.02em] text-3xl sm:text-4xl md:text-6xl lg:text-7xl mb-6 md:mb-8">
           Built to ship.
           <br />
           From idea to production.
         </h2>
-        <p className="text-(--muted) text-base md:text-lg leading-relaxed max-w-lg mb-10">
+        <p className="text-(--muted) text-sm md:text-lg leading-relaxed max-w-lg mb-8 md:mb-10">
           Each project is a proof of execution — designed from first principles
           and shipped end-to-end.
         </p>
-        <p className="text-(--muted) font-mono text-[11px] tracking-[0.2em] uppercase flex items-center gap-3">
-          SCROLL TO EXPLORE — {PROJECTS.length} PROJECTS{" "}
-          <span className="text-base">↓</span>
-        </p>
+        <div className="flex flex-wrap items-center gap-6">
+          <p className="text-(--muted) font-mono text-[11px] tracking-[0.2em] uppercase flex items-center gap-3">
+            SCROLL TO EXPLORE — {PROJECTS.length} PROJECTS{" "}
+            <span className="text-base">↓</span>
+          </p>
+          <Link
+            href="/projects"
+            className="font-mono text-[11px] tracking-[0.15em] uppercase text-[var(--accent)] border border-[var(--accent)]/40 px-4 py-2 hover:bg-[var(--accent)]/10 transition-colors duration-200 shrink-0"
+          >
+            View All →
+          </Link>
+        </div>
       </div>
     </motion.div>
   );
@@ -171,24 +182,24 @@ function ProjectText({
       initial={false}
       animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
       transition={{ duration: 0.65, ease: EASE }}
-      className="absolute inset-0 flex flex-col justify-end px-8 md:px-16 lg:px-24 pb-20 md:pb-28 z-10"
+      className="absolute inset-0 flex flex-col justify-end px-6 sm:px-8 md:px-16 lg:px-24 pb-16 sm:pb-20 md:pb-28 z-10"
       style={{ pointerEvents: visible ? "auto" : "none" }}
     >
       <div className="max-w-3xl">
-        <p className="text-white/50 font-mono text-[11px] tracking-[0.2em] uppercase mb-6">
+        <p className="text-white/50 font-mono text-[11px] tracking-[0.2em] uppercase mb-4 md:mb-6">
           {project.category}
         </p>
-        <h2 className="font-heading font-bold text-white leading-[1.05] tracking-[-0.02em] text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-6">
+        <h2 className="font-heading font-bold text-white leading-[1.05] tracking-[-0.02em] text-3xl sm:text-5xl md:text-7xl lg:text-8xl mb-4 md:mb-6">
           {flatTitle(project.title)}
         </h2>
-        <p className="text-white/60 text-base md:text-lg leading-relaxed max-w-xl mb-8">
+        <p className="text-white/60 text-sm md:text-lg leading-relaxed max-w-xl mb-6 md:mb-8">
           {project.tagline}
         </p>
-        <div className="flex flex-wrap gap-3 mb-10">
+        <div className="flex flex-wrap gap-2 md:gap-3 mb-8 md:mb-10">
           {slideTags(project.stack).map((tag) => (
             <span
               key={tag}
-              className="border border-white/20 text-white/70 font-mono text-xs px-4 py-2 tracking-wider"
+              className="border border-white/20 text-white/70 font-mono text-[10px] sm:text-xs px-3 sm:px-4 py-1.5 sm:py-2 tracking-wider"
             >
               {tag}
             </span>
@@ -261,6 +272,89 @@ function SegmentBar({
         style={{ width: fill }}
       />
     </div>
+  );
+}
+
+// ── Mobile card ────────────────────────────────────────────────────────────────
+
+function MobileProjectCard({
+  project,
+  index,
+  onViewProject,
+}: {
+  project: ProjectData;
+  index: number;
+  onViewProject?: () => void;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.6, ease: EASE }}
+      className="overflow-hidden border border-white/[0.08]"
+    >
+      {/* Image */}
+      <div className="relative h-[220px] overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: project.images[0]
+              ? `url("${project.images[0]}")`
+              : undefined,
+            backgroundColor: project.bgColor,
+          }}
+        />
+        <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/10 to-transparent" />
+        <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+          <span className="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">
+            {project.category}
+          </span>
+          <span className="font-mono text-[9px] text-white/25">
+            {String(index + 1).padStart(2, "0")} / {String(PROJECTS.length).padStart(2, "0")}
+          </span>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="bg-[#0a0a0a] px-5 pt-5 pb-6">
+        <h3 className="font-heading font-bold text-white text-2xl leading-[1.05] tracking-[-0.02em] mb-2">
+          {flatTitle(project.title)}
+        </h3>
+        <p className="text-white/55 text-sm leading-relaxed mb-4">
+          {project.tagline}
+        </p>
+        <div className="flex flex-wrap gap-2 mb-5">
+          {slideTags(project.stack).map((tag) => (
+            <span
+              key={tag}
+              className="border border-white/[0.12] text-white/50 font-mono text-[9px] px-3 py-1 tracking-wider"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+        {project.hasDetailPage && onViewProject ? (
+          <button
+            onClick={onViewProject}
+            className="inline-flex items-center justify-center gap-2 text-white font-mono text-[10px] tracking-[0.15em] uppercase px-5 py-3 w-full"
+            style={{ backgroundColor: "var(--accent)" }}
+          >
+            View Project <ExternalLink size={12} />
+          </button>
+        ) : (
+          <a
+            href={project.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 text-white font-mono text-[10px] tracking-[0.15em] uppercase px-5 py-3 w-full"
+            style={{ backgroundColor: "var(--accent)" }}
+          >
+            View Project <ExternalLink size={12} />
+          </a>
+        )}
+      </div>
+    </motion.div>
   );
 }
 
@@ -352,46 +446,82 @@ export default function ProjectsSection({
         : (PROJECTS[incomingIndex - 1] ?? null);
 
   return (
-    <section
-      id="projects"
-      ref={containerRef}
-      style={{ height: `${TOTAL_SLIDES * 100}vh` }}
-      className="relative"
-    >
-      <div className="sticky top-0 h-screen overflow-hidden bg-black">
-        <ProjectCounter index={displayedIndex} />
-
-        {/* ── Settled background (the slide currently in stable view) ── */}
-        <SlideBackground project={displayedProject} />
-
-        {/* ── Venetian strips for the incoming slide ── */}
-        {incomingIndex !== null && (
-          <VenetianReveal key={incomingIndex} project={incomingProject} />
-        )}
-
-        {/* ── Text overlay (separate from strips so it enters cleanly) ── */}
-        {displayedIndex === 0 ? (
-          <IntroText visible={textVisible} />
-        ) : displayedProject ? (
-          <ProjectText
-            project={displayedProject}
-            visible={textVisible}
-            onViewProject={onViewProject}
-          />
-        ) : null}
-
-        {/* ── Progress bars (one per project, raw scroll driven) ── */}
-        <div className="absolute bottom-6 left-0 right-0 flex gap-1 h-0.75 z-30 px-8 md:px-16 lg:px-24">
-          {PROJECTS.map((_, i) => (
-            <SegmentBar
-              key={i}
-              scrollYProgress={scrollYProgress}
-              segStart={i / (TOTAL_SLIDES - 1)}
-              segEnd={(i + 1) / (TOTAL_SLIDES - 1)}
+    <div id="projects">
+      {/* ── Mobile: vertical card stack ─────────────────────────────────── */}
+      <section className="block md:hidden bg-black pt-20 pb-24 px-4 sm:px-6">
+        <p className="border-t border-white/[0.08] pt-6 text-white/40 font-mono text-[11px] tracking-[0.2em] uppercase mb-10">
+          // PROJECTS
+        </p>
+        <div className="mb-10">
+          <h2 className="font-heading font-bold text-white text-3xl leading-[1.08] tracking-[-0.02em] mb-3">
+            Built to ship.
+            <br />
+            <span style={{ color: "var(--accent)" }}>From idea to production.</span>
+          </h2>
+          <p className="text-white/40 text-sm leading-relaxed mt-4">
+            {PROJECTS.length} projects — designed from first principles, shipped end-to-end.
+          </p>
+        </div>
+        <div className="space-y-4">
+          {PROJECTS.slice(0, MOBILE_LIMIT).map((project, i) => (
+            <MobileProjectCard
+              key={project.slug}
+              project={project}
+              index={i}
+              onViewProject={onViewProject}
             />
           ))}
         </div>
-      </div>
-    </section>
+
+        <Link
+          href="/projects"
+          className="mt-8 flex items-center justify-center gap-2 w-full border border-white/[0.12] text-[var(--muted)] font-mono text-[11px] tracking-[0.2em] uppercase py-4 hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors duration-300"
+        >
+          View All Projects ({PROJECTS.length}) →
+        </Link>
+      </section>
+
+      {/* ── Desktop: sticky scroll carousel ─────────────────────────────── */}
+      <section
+        ref={containerRef}
+        style={{ height: `${TOTAL_SLIDES * 100}vh` }}
+        className="relative hidden md:block"
+      >
+        <div className="sticky top-0 h-screen overflow-hidden bg-black">
+          <ProjectCounter index={displayedIndex} />
+
+          {/* ── Settled background (the slide currently in stable view) ── */}
+          <SlideBackground project={displayedProject} />
+
+          {/* ── Venetian strips for the incoming slide ── */}
+          {incomingIndex !== null && (
+            <VenetianReveal key={incomingIndex} project={incomingProject} />
+          )}
+
+          {/* ── Text overlay (separate from strips so it enters cleanly) ── */}
+          {displayedIndex === 0 ? (
+            <IntroText visible={textVisible} />
+          ) : displayedProject ? (
+            <ProjectText
+              project={displayedProject}
+              visible={textVisible}
+              onViewProject={onViewProject}
+            />
+          ) : null}
+
+          {/* ── Progress bars (one per project, raw scroll driven) ── */}
+          <div className="absolute bottom-6 left-0 right-0 flex gap-1 h-0.75 z-30 px-8 md:px-16 lg:px-24">
+            {PROJECTS.map((_, i) => (
+              <SegmentBar
+                key={i}
+                scrollYProgress={scrollYProgress}
+                segStart={i / (TOTAL_SLIDES - 1)}
+                segEnd={(i + 1) / (TOTAL_SLIDES - 1)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

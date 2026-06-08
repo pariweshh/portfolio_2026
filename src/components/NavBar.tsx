@@ -131,7 +131,7 @@ export default function NavBar({ onNavigateToProjects: _ }: NavBarProps) {
   return (
     <>
       {/* ── Fixed corner bar — always visible ─────────────────────── */}
-      <div className="fixed top-0 left-0 right-0 z-[90] pointer-events-none">
+      <div className="fixed top-0 left-0 right-0 z-90 pointer-events-none">
         <div className="flex justify-between items-center px-6 md:px-10 py-6 md:py-7">
           {/* Left slot intentionally empty */}
           <div />
@@ -151,7 +151,7 @@ export default function NavBar({ onNavigateToProjects: _ }: NavBarProps) {
             className="pointer-events-auto w-10 h-10 flex items-center justify-center"
           >
             {/* 13px container keeps both lines equidistant from centre */}
-            <div className="relative w-6 h-[13px]">
+            <div className="relative w-6 h-3.25">
               <motion.span
                 animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
                 transition={{ duration: 0.5, ease: EASE }}
@@ -171,7 +171,7 @@ export default function NavBar({ onNavigateToProjects: _ }: NavBarProps) {
       <motion.div
         animate={{ opacity: activeSection ? 1 : 0 }}
         transition={{ duration: 0.5 }}
-        className="fixed left-6 md:left-8 top-1/2 -translate-y-1/2 z-[89] hidden md:flex flex-col gap-[14px] pointer-events-none"
+        className="fixed left-6 md:left-8 top-1/2 -translate-y-1/2 z-89 hidden md:flex flex-col gap-3.5 pointer-events-none"
         aria-hidden="true"
       >
         {NAV_LINKS.map(({ id, label, num }) => {
@@ -203,7 +203,7 @@ export default function NavBar({ onNavigateToProjects: _ }: NavBarProps) {
                   x: isActive ? 0 : -6,
                 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="font-mono text-[9px] tracking-[0.22em] text-[var(--accent)] uppercase whitespace-nowrap"
+                className="font-mono text-[9px] tracking-[0.22em] text-(--accent) uppercase whitespace-nowrap"
               >
                 {num}
               </motion.span>
@@ -227,7 +227,7 @@ export default function NavBar({ onNavigateToProjects: _ }: NavBarProps) {
               opacity: 0,
               transition: { duration: 0.28, ease: [0.4, 0, 1, 1] },
             }}
-            className="fixed inset-0 z-[80] flex flex-col"
+            className="fixed inset-0 z-80 flex flex-col"
             style={{
               background:
                 "radial-gradient(ellipse 80% 60% at 90% 100%, rgba(231,142,41,0.09) 0%, transparent 55%), #0a0a0a",
@@ -239,7 +239,7 @@ export default function NavBar({ onNavigateToProjects: _ }: NavBarProps) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.3 }}
-                className="font-mono text-[11px] tracking-[0.2em] text-[var(--muted)] uppercase border-t border-white/[0.07] pt-5"
+                className="font-mono text-[11px] tracking-[0.2em] text-(--muted) uppercase border-t border-white/[0.07] pt-5"
               >
                 // NAVIGATION
               </motion.p>
@@ -254,7 +254,7 @@ export default function NavBar({ onNavigateToProjects: _ }: NavBarProps) {
                 {NAV_LINKS.map(({ num, label, id }, i) => (
                   <li
                     key={id}
-                    className="overflow-hidden border-b border-white/[0.05]"
+                    className="overflow-hidden border-b border-white/5"
                   >
                     <motion.div
                       initial={{ y: "105%" }}
@@ -271,14 +271,14 @@ export default function NavBar({ onNavigateToProjects: _ }: NavBarProps) {
                         className="group flex items-center justify-between w-full py-3.5 md:py-4 text-left"
                       >
                         <div className="flex items-baseline gap-4 md:gap-6">
-                          <span className="font-mono text-[10px] tracking-[0.2em] text-[var(--accent)] opacity-40 group-hover:opacity-100 transition-opacity duration-300 shrink-0">
+                          <span className="font-mono text-[10px] tracking-[0.2em] text-(--accent) opacity-40 group-hover:opacity-100 transition-opacity duration-300 shrink-0">
                             {num}
                           </span>
-                          <span className="font-heading font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[70px] leading-[1] tracking-[-0.02em] text-white group-hover:text-[var(--accent)] transition-colors duration-300">
+                          <span className="font-heading font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[70px] leading-none tracking-[-0.02em] text-white group-hover:text-(--accent) transition-colors duration-300">
                             {label}
                           </span>
                         </div>
-                        <span className="font-mono text-lg text-[var(--muted)] group-hover:text-[var(--accent)] group-hover:translate-x-1.5 transition-all duration-300 shrink-0 ml-4">
+                        <span className="font-mono text-lg text-(--muted) group-hover:text-(--accent) group-hover:translate-x-1.5 transition-all duration-300 shrink-0 ml-4">
                           →
                         </span>
                       </button>
@@ -306,7 +306,7 @@ export default function NavBar({ onNavigateToProjects: _ }: NavBarProps) {
                     target={href.startsWith("mailto") ? undefined : "_blank"}
                     rel="noopener noreferrer"
                     onClick={close}
-                    className="font-mono text-[11px] tracking-[0.15em] text-[var(--muted)] uppercase hover:text-[var(--accent)] transition-colors duration-200"
+                    className="font-mono text-[11px] tracking-[0.15em] text-(--muted) uppercase hover:text-(--accent) transition-colors duration-200"
                   >
                     {label}
                   </a>

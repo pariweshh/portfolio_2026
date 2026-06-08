@@ -153,7 +153,7 @@ export default function ContactSection() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="md:w-[45%] relative min-h-[220px] md:min-h-[560px] bg-[#0e0e0e] overflow-hidden"
+          className="md:w-[45%] relative min-h-[300px] md:min-h-[560px] bg-[#0e0e0e] overflow-hidden"
         >
           <div
             className="absolute inset-0 opacity-20"
